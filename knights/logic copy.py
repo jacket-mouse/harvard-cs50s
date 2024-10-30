@@ -15,6 +15,7 @@ class Sentence():
         return set()
 
     @classmethod
+    # 检查sentence是否是类Sentence的实例
     def validate(cls, sentence):
         if not isinstance(sentence, Sentence):
             raise TypeError("must be a logical sentence")
@@ -70,6 +71,8 @@ class Symbol(Sentence):
 
 class Not(Sentence):
     def __init__(self, operand):
+        # 接受一个symbol或者其他组合形成的逻辑式子,这些都是Sentence的子类
+        # Not(animal) Not(Or(lion, tiger))
         Sentence.validate(operand)
         self.operand = operand
 
@@ -232,13 +235,12 @@ def model_check(knowledge, query):
 
         # If model has an assignment for each symbol
         if not symbols:
-
+            print(model)
             # If knowledge base is true in model, then query must also be true
             if knowledge.evaluate(model):
                 return query.evaluate(model)
             return True
         else:
-
             # Choose one of the remaining unused symbols
             remaining = symbols.copy()
             p = remaining.pop()
